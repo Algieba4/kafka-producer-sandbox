@@ -1,0 +1,14 @@
+otel:
+  instrumentation.micrometer.enabled: true
+  service.name: "kafka-producer-sandbox-tests"
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      schema.registry.url: mock://test-scope
+      security.protocol: PLAINTEXT
+    topic: test.topic

@@ -1,0 +1,24 @@
+management:
+  endpoint.health.probes.enabled: true
+  health:
+    livenessstate.enabled: true
+    readinessstate.enabled: true
+
+otel:
+  instrumentation.micrometer.enabled: true
+  service.name: "kafka-producer-sandbox"
+
+spring:
+  application.name: kafka-producer-sandbox
+  jpa.hibernate.ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener.observation-enabled: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties.enable.idempotence: false
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties.schema.registry.url: http://localhost:9081
+    template.observation-enabled: true
+    topic: test.topic
+  profiles.default: local
