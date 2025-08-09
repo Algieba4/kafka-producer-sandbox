@@ -1,12 +1,4 @@
 services:
-  jaeger:
-    container_name: jaeger
-    image: jaegertracing/all-in-one:latest
-    ports:
-      - "6831:6831/udp" # UDP port for Jaeger agent
-      - "16686:16686" # Web UI
-      - "14268:14268" # HTTP port for spans
-
   kafka:
     container_name: kafka
     image: apache/kafka-native:latest
@@ -37,7 +29,6 @@ services:
       KAFKA_SSL_CLIENT_AUTH: "none"
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
@@ -59,21 +50,3 @@ services:
       timeout: 1s
       retries: 10
     stop_signal: SIGKILL
-
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus:latest
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-
-  otel-collector:
-    container_name: otel-collector
-    image: otel/opentelemetry-collector-contrib:latest
-    command: [ "--config=/etc/otel-collector-config.yaml" ]
-    volumes:
-      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "4317:4317" # OTLP gRPC receiver
-      - "4318:4318" # OTLP HTTP receiver (if needed)
