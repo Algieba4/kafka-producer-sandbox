@@ -5,7 +5,9 @@ management:
     readinessstate.enabled: true
 
 otel:
-  instrumentation.micrometer.enabled: true
+  instrumentation.micrometer.enabled: false
+  logs.exporter: none
+  metrics.exporter: none
   service.name: "kafka-producer-sandbox"
 
 spring:
@@ -20,5 +22,5 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     properties.schema.registry.url: http://localhost:9081
     template.observation-enabled: true
-    topic: test.topic
+    topic.status: status.topic
   profiles.default: local

@@ -19,7 +19,7 @@ public class KafkaProducerController {
     @Autowired
     private KafkaProducer kafkaProducer;
 
-    @Value("${spring.kafka.topic}")
+    @Value("${spring.kafka.topic.status}")
     private String topic;
 
     @PutMapping(value="/")
