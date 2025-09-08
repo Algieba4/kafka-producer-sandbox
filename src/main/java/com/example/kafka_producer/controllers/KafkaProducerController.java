@@ -1,6 +1,6 @@
-package com.example.kafka_producer_sandbox.controllers;
+package com.example.kafka_producer.controllers;
 
-import com.example.kafka_producer_sandbox.producers.KafkaProducer;
+import com.example.kafka_producer.producers.KafkaProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeaders;
@@ -34,7 +34,7 @@ public class KafkaProducerController {
             new ProducerRecord<>(topic,
                 0,
                 System.currentTimeMillis(),
-                "kafka-producer-sandbox",
+                "kafka-producer",
                 requestBody,
                 requestHeaders);
 

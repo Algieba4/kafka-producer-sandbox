@@ -1,5 +1,6 @@
-package com.example.kafka_producer_sandbox.controllers;
+package com.example.kafka_producer.controllers;
 
+import com.example.kafka_producer.kafka_producer_sandbox.controllers.KafkaProducerController;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -11,10 +11,10 @@
 	</parent>
 
 	<groupId>com.example</groupId>
-	<artifactId>kafka-producer-sandbox</artifactId>
+	<artifactId>kafka-producer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kafka-producer-sandbox</name>
-	<description>Sandbox project to understand basics</description>
+	<name>kafka-producer</name>
+	<description>Project for producing from Kafka</description>
 
     <properties>
         <java.version>24</java.version>
