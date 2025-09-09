@@ -34,7 +34,7 @@ extensions:
 
 exporters:
   # Data sources: traces
-  otlp/jaeger:
+  otlp:
     endpoint: jaeger-server:4317
     tls:
       insecure: true

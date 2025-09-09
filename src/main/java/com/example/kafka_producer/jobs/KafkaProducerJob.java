@@ -1,7 +1,10 @@
 package com.example.kafka_producer.jobs;
 
-import com.example.kafka_producer.enums.status;
+import com.example.kafka_producer.enums.Status;
+import com.example.kafka_producer.models.OrderModel;
 import com.example.kafka_producer.producers.KafkaProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeaders;
@@ -64,10 +67,24 @@ public class KafkaProducerJob {
     }
 
     private String getRequestBody() {
-        var statusList = status.values();
+        var statusList = Status.values();
         var randomNumber = new Random();
         var randomIndex = randomNumber.nextInt(statusList.length);
-        return "{\\\"status\\\":\\\""+statusList[randomIndex]+"\\\"}";
+
+        var orderModel = new OrderModel();
+        orderModel.setOrderNumber(randomNumber.nextInt(8));
+        orderModel.setOrderStatus(statusList[randomIndex].toString());
+
+        var objectMapper = new ObjectMapper();
+        String orderModelMapper = null;
+        try {
+            orderModelMapper = objectMapper.writeValueAsString(orderModel);
+        } catch (JsonProcessingException jpe) {
+            log.error("Error serializing order model: {}", jpe.getMessage(), jpe);
+            throw new RuntimeException(jpe);
+        }
+
+        return orderModelMapper;
     }
 
     private RecordHeaders getRequestHeaders() {

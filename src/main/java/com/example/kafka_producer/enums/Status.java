@@ -1,6 +1,6 @@
 package com.example.kafka_producer.enums;
 
-public enum status {
+public enum Status {
     NEW,
     PROCESSING,
     SUCCESS,

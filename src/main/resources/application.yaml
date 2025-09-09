@@ -2,14 +2,15 @@ cron.status: "0 * * * * ?"
 
 management:
   endpoint.health.probes.enabled: true
+  endpoints.web.exposure.include: health, metrics
   health:
     livenessstate.enabled: true
     readinessstate.enabled: true
 
 otel:
-  instrumentation.micrometer.enabled: false
+  instrumentation.micrometer.enabled: true
   logs.exporter: none
-  metrics.exporter: none
+  metrics.exporter: otlp
   service.name: "kafka-producer"
   traces.exporter: none
 
@@ -25,5 +26,5 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     properties.schema.registry.url: http://localhost:9081
     template.observation-enabled: true
-    topic.status: status.topic
+    topic.status: order.status
   profiles.default: local
