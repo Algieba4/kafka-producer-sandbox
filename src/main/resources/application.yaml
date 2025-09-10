@@ -10,9 +10,11 @@ management:
 otel:
   instrumentation.micrometer.enabled: true
   logs.exporter: none
-  metrics.exporter: otlp
+  metrics.exporter: none
   service.name: "kafka-producer"
   traces.exporter: none
+
+server.port: 5000
 
 spring:
   application.name: kafka-producer
@@ -24,7 +26,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties.enable.idempotence: false
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    properties.schema.registry.url: http://localhost:9081
     template.observation-enabled: true
     topic.status: order.status
   profiles.default: local
