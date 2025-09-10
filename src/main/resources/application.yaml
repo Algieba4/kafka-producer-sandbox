@@ -9,10 +9,10 @@ management:
 
 otel:
   instrumentation.micrometer.enabled: true
-  logs.exporter: none
-  metrics.exporter: none
+  logs.exporter: otlp
+  metrics.exporter: otlp
   service.name: "kafka-producer"
-  traces.exporter: none
+  traces.exporter: otlp
 
 server.port: 5000
 

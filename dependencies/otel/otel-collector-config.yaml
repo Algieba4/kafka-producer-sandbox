@@ -1,46 +1,36 @@
-receivers:
-  # Data sources: traces
-  jaeger:
-    protocols:
-      grpc:
-        endpoint: localhost:4317
-      thrift_binary:
-      thrift_compact:
-      thrift_http:
-
+receivers: # Define how the collector receives data (e.g., OTLP, Prometheus)
   otlp:
     protocols:
       grpc:
-        endpoint: localhost:4317
+        endpoint: 0.0.0.0:4317
       http:
-        endpoint: localhost:4318
+        endpoint: 0.0.0.0:4318
+
+processors: # Define how the collector processes data (e.g., batching, resource detection)
+  batch:
+
+exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Loki)
+  # Data sources: traces
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+  debug:
+    verbosity: detailed
 
   # Data sources: metrics
   prometheus:
-    config:
-      scrape_configs:
-        - job_name: otel-collector
-          scrape_interval: 5s
-          static_configs:
-            - targets: [ localhost:8888 ]
+    endpoint: "0.0.0.0:8889"
 
-processors:
-  batch:
+  # TODO: look into Grafana Loki (for logs) and Grafana Tempo (for traces)
+  # Grafana, Tempo + Loki + Prometheus = “LGTM stack” (modern observability stack).
+  # Unified observability platform, all visible in Grafana
 
 extensions:
   health_check:
   pprof:
   zpages:
-
-exporters:
-  # Data sources: traces
-  otlp:
-    endpoint: jaeger-server:4317
-    tls:
-      insecure: true
-  # Data sources: metrics
-  prometheus:
-    endpoint: "localhost:9090"
 
 service:
   extensions: [health_check, pprof, zpages]
@@ -48,12 +38,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlp/jaeger]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, prometheus]
+      exporters: [prometheus]
     logs:
-      receivers: [ otlp ]
-      processors: [ batch ]
-      exporters: [ otlp ]
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
