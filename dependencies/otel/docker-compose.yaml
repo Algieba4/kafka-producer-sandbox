@@ -1,4 +1,27 @@
 services:
+  loki: # Logs exporter
+    container_name: loki
+    image: grafana/loki:latest
+    command: [ "-config.file=/etc/loki.yaml" ]
+    volumes:
+      - ./loki.yaml:/etc/loki.yaml
+      - ./loki-data:/var/loki
+      - ./loki-wal:/wal
+      - ./loki-logs:/var/log/loki
+    ports:
+      - "3100:3100"   # Loki query & ingest
+
+  tempo: # Traces exporter
+    container_name: tempo
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - ./tempo-data:/var/tempo
+    ports:
+      - "3200:3200" # Tempo query (used by Grafana)
+      - "4317:4317" # OTLP gRPC receiver
+
   otel-collector:
     container_name: otel-collector
     image: otel/opentelemetry-collector-contrib:latest
@@ -6,23 +29,15 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
-      - "1888:1888" # pprof extension
-      - "4317:4317" # OTLP gRPC receiver
+      #- "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP HTTP receiver (for traces and metrics)
-      - "8888:8888" # Prometheus metrics exporter (if configured in collector)
       - "8889:8889" # Prometheus exporter metrics
       - "13133:13133" # health_check extension
-      - "55679:55679" # zpages extension
-
-  jaeger:
-    container_name: jaeger
-    image: jaegertracing/all-in-one:latest
-    ports:
-      - "16686:16686" # Jaeger UI
     depends_on:
-      - otel-collector # If collector exports to Jaeger
+      - tempo
+      - loki
 
-  prometheus:
+  prometheus: # Metrics exporter
     container_name: prometheus
     image: prom/prometheus:latest
     command: ["--config.file=/etc/prometheus/prometheus.yaml"]
@@ -32,3 +47,22 @@ services:
       - "9090:9090"
     depends_on:
       - otel-collector # If collector exports to Prometheus
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"   # Grafana UI
+    volumes: # Autoconfigures datasources and dashboards.
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana-dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./dashboards:/etc/grafana/provisioning/dashboards # provisions .json dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+    depends_on:
+      - prometheus
+      - tempo
+      - loki

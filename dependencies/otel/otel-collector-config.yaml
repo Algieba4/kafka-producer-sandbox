@@ -10,22 +10,25 @@ processors: # Define how the collector processes data (e.g., batching, resource 
   batch:
 
 exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Loki)
-  # Data sources: traces
-  otlp/jaeger:
-    endpoint: jaeger:4317
+  # Debug exporter for logs/traces/metrics
+  debug:
+    verbosity: detailed
+
+  # Logs → Loki
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
     tls:
       insecure: true
 
-  debug:
-    verbosity: detailed
+  # Traces → Tempo
+  otlphttp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
 
   # Data sources: metrics
   prometheus:
     endpoint: "0.0.0.0:8889"
-
-  # TODO: look into Grafana Loki (for logs) and Grafana Tempo (for traces)
-  # Grafana, Tempo + Loki + Prometheus = “LGTM stack” (modern observability stack).
-  # Unified observability platform, all visible in Grafana
 
 extensions:
   health_check:
@@ -38,12 +41,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/jaeger]
+      exporters: [otlphttp/tempo, debug]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [prometheus, debug]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [otlphttp/loki, debug]

@@ -1,0 +1,14 @@
+{
+  "id": null,
+  "title": "Tempo Traces Explorer",
+  "schemaVersion": 30,
+  "version": 1,
+  "panels": [
+    {
+      "type": "traces",
+      "title": "Trace Search",
+      "datasource": { "type": "tempo", "uid": "Tempo" },
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 20 }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": null,
+  "title": "Logs + Traces Correlation",
+  "schemaVersion": 30,
+  "version": 1,
+  "panels": [
+    {
+      "type": "logs",
+      "title": "Application Logs (with TraceID)",
+      "datasource": { "type": "loki", "uid": "Loki" },
+      "targets": [
+        { "expr": "{job=\"otel-collector\"}" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 12 },
+      "options": {
+        "showLabels": true,
+        "showTime": true,
+        "enableLogDetails": true
+      },
+      "transformations": [],
+      "fieldConfig": {
+        "overrides": []
+      }
+    },
+    {
+      "type": "traces",
+      "title": "Trace View",
+      "datasource": { "type": "tempo", "uid": "Tempo" },
+      "gridPos": { "x": 0, "y": 12, "w": 24, "h": 12 }
+    }
+  ],
+  "links": [
+    {
+      "title": "View Trace",
+      "url": "/explore?left=%7B%22datasource%22:%22Tempo%22,%22queries%22:[%7B%22query%22:%22$traceId%22%7D]%7D",
+      "targetBlank": true,
+      "type": "dashboards"
+    }
+  ]
+}

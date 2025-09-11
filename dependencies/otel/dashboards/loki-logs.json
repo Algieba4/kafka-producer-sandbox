@@ -1,0 +1,17 @@
+{
+  "id": null,
+  "title": "Loki Logs Explorer",
+  "schemaVersion": 30,
+  "version": 1,
+  "panels": [
+    {
+      "type": "logs",
+      "title": "Application Logs",
+      "datasource": { "type": "loki", "uid": "Loki" },
+      "targets": [
+        { "expr": "{job=\"otel-collector\"}" }
+      ],
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 20 }
+    }
+  ]
+}
