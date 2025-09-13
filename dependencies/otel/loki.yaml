@@ -1,6 +1,16 @@
-server:
-  http_listen_address: 0.0.0.0
-  http_listen_port: 3100
+auth_enabled: false
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /var/loki
+  storage:
+    filesystem:
+      chunks_directory: /var/loki/chunks
+      rules_directory: /var/loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
 
 ingester:
   lifecycler:
@@ -17,25 +27,31 @@ limits_config:
   max_concurrent_tail_requests: 20
   volume_enabled: true
 
+otlp:
+  protocols:
+    http:
+      endpoint: 0.0.0.0:4318
+    grpc:
+      endpoint: 0.0.0.0:4317
+
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /var/loki/rules
+
+server:
+  grpc_listen_port: 9096
+  http_listen_address: 0.0.0.0
+  http_listen_port: 3100
+  log_level: info
+
 schema_config:
   configs:
-    - from: 2025-01-01
+    - from: 2020-10-24
       store: tsdb
       object_store: filesystem
       schema: v13
       index:
         prefix: index_
         period: 24h
-
-storage_config:
-  tsdb_shipper:
-    active_index_directory: /tmp/loki/tsdb-index
-    cache_location: /tmp/loki/tsdb-cache
-  filesystem:
-    directory: /tmp/loki/chunks
-
-ruler:
-  storage:
-    type: local
-    local:
-      directory: /tmp/loki/rules

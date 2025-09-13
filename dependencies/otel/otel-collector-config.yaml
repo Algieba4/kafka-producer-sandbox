@@ -15,10 +15,10 @@ exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Lo
     verbosity: detailed
 
   # Logs → Loki
-  otlphttp/loki:
-    endpoint: http://loki:3100/otlp/v1/logs
-    tls:
-      insecure: true
+  #otlphttp/loki:
+  #  endpoint: http://loki:4318/v1/logs
+  #  tls:
+  #    insecure: true
 
   # Traces → Tempo
   otlphttp/tempo:
@@ -49,4 +49,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlphttp/loki, debug]
+      exporters: [debug]

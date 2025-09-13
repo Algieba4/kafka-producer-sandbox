@@ -1,15 +1,17 @@
 services:
-  loki: # Logs exporter
-    container_name: loki
-    image: grafana/loki:latest
-    command: [ "-config.file=/etc/loki.yaml" ]
-    volumes:
-      - ./loki.yaml:/etc/loki.yaml
-      - ./loki-data:/var/loki
-      - ./loki-wal:/wal
-      - ./loki-logs:/var/log/loki
-    ports:
-      - "3100:3100"   # Loki query & ingest
+#  loki: # Logs exporter
+#    container_name: loki
+#    image: grafana/loki:3.5.5
+#    command:
+#      - -config.file=/etc/loki.yaml
+#      - -config.expand-env=true
+#    volumes:
+#      - ./loki.yaml:/etc/loki.yaml
+#      - ./loki-data:/var/loki
+#      - ./loki-wal:/wal
+#      - ./loki-logs:/var/log/loki
+#    ports:
+#      - "3100:3100"   # Loki query & ingest
 
   tempo: # Traces exporter
     container_name: tempo
@@ -21,7 +23,6 @@ services:
     ports:
       - "3200:3200" # Tempo query (used by Grafana)
       - "4317:4317" # OTLP gRPC receiver
-      - "4318:4318" # OTLP HTTP receiver (for traces and metrics)
 
   otel-collector:
     container_name: otel-collector
@@ -31,12 +32,12 @@ services:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
       #- "4317:4317" # OTLP gRPC receiver
-      #- "4318:4318" # OTLP HTTP receiver (for traces and metrics)
+      - "4318:4318" # OTLP HTTP receiver (for traces and metrics)
       - "8889:8889" # Prometheus exporter metrics
       - "13133:13133" # health_check extension
     depends_on:
       - tempo
-      - loki
+  #    - loki
 
   prometheus: # Metrics exporter
     container_name: prometheus
@@ -66,4 +67,4 @@ services:
     depends_on:
       - prometheus
       - tempo
-      - loki
+  #    - loki

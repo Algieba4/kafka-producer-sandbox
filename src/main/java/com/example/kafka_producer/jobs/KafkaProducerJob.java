@@ -58,7 +58,7 @@ public class KafkaProducerJob {
         var randomIndex = randomNumber.nextInt(statusList.length);
 
         var orderModel = new OrderModel();
-        orderModel.setOrderNumber(randomNumber.nextInt(8));
+        orderModel.setOrderNumber(randomNumber.nextInt(90000000) + 10000000);
         orderModel.setOrderStatus(statusList[randomIndex].toString());
 
         var objectMapper = new ObjectMapper();
