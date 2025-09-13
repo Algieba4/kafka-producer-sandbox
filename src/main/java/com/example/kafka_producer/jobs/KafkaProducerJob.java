@@ -42,20 +42,6 @@ public class KafkaProducerJob {
                 requestHeaders);
 
         kafkaProducer.sendMessage(producerRecord);
-        log.info("Sent message with traceparent {}", extractTraceparent(requestHeaders));
-    }
-
-    private String extractTraceparent(RecordHeaders headers) {
-        for(var header: headers) {
-            if(header.key().equals("traceparent")) {
-                var traceparent = new String(header.value(), StandardCharsets.UTF_8);
-                log.debug("Traceparent: {}", traceparent);
-                return traceparent;
-            }
-        }
-
-        log.warn("Traceparent not found");
-        return null;
     }
 
     private String generateTraceparent() {

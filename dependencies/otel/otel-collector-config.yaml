@@ -7,7 +7,7 @@ receivers: # Define how the collector receives data (e.g., OTLP, Prometheus)
         endpoint: 0.0.0.0:4318
 
 processors: # Define how the collector processes data (e.g., batching, resource detection)
-  batch:
+  batch: {}
 
 exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Loki)
   # Debug exporter for logs/traces/metrics
@@ -16,13 +16,13 @@ exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Lo
 
   # Logs → Loki
   otlphttp/loki:
-    endpoint: http://loki:3100/otlp
+    endpoint: http://loki:3100/otlp/v1/logs
     tls:
       insecure: true
 
   # Traces → Tempo
   otlphttp/tempo:
-    endpoint: tempo:4317
+    endpoint: http://tempo:4317/v1/traces
     tls:
       insecure: true
 
@@ -31,9 +31,9 @@ exporters: # Define where the collector sends data (e.g., Jaeger, Prometheus, Lo
     endpoint: "0.0.0.0:8889"
 
 extensions:
-  health_check:
-  pprof:
-  zpages:
+  health_check: {}
+  pprof: {}
+  zpages: {}
 
 service:
   extensions: [health_check, pprof, zpages]

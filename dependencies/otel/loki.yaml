@@ -15,6 +15,7 @@ limits_config:
   ingestion_rate_mb: 4
   ingestion_burst_size_mb: 6
   max_concurrent_tail_requests: 20
+  volume_enabled: true
 
 schema_config:
   configs:
