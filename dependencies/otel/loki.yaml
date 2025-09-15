@@ -9,6 +9,7 @@ common:
       rules_directory: /var/loki/rules
   replication_factor: 1
   ring:
+    instance_addr: 0.0.0.0
     kvstore:
       store: inmemory
 
@@ -26,13 +27,6 @@ limits_config:
   ingestion_burst_size_mb: 6
   max_concurrent_tail_requests: 20
   volume_enabled: true
-
-otlp:
-  protocols:
-    http:
-      endpoint: 0.0.0.0:4318
-    grpc:
-      endpoint: 0.0.0.0:4317
 
 ruler:
   storage:
