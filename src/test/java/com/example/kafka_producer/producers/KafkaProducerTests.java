@@ -1,6 +1,6 @@
 package com.example.kafka_producer.producers;
 
-import com.example.kafka_producer.kafka_producer_sandbox.producers.KafkaProducer;
+import com.example.kafka_producer.producers.KafkaProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeaders;
