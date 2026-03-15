@@ -1,0 +1,21 @@
+management:
+  endpoint.health.probes.enabled: false
+  health:
+    livenessstate.enabled: false
+    readinessstate.enabled: false
+  logging.export.enabled: false
+  metrics.enable.kafka: false
+  otlp.metrics.export.enabled: false
+  tracing.export.enabled: false
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener.observation-enabled: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      schema.registry.url: mock://test-scope
+      security.protocol: PLAINTEXT
+    template.observation-enabled: true
