@@ -1,7 +1,3 @@
-otel:
-  instrumentation.micrometer.enabled: true
-  service.name: "kafka-producer-sandbox-tests"
-
 spring:
   kafka:
     bootstrap-servers: localhost:9092

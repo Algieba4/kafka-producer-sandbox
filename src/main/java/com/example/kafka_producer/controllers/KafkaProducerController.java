@@ -4,7 +4,6 @@ import com.example.kafka_producer.producers.KafkaProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +15,14 @@ import java.util.Map;
 @Slf4j
 public class KafkaProducerController {
 
-    @Autowired
-    private KafkaProducer kafkaProducer;
+    private final KafkaProducer kafkaProducer;
 
     @Value("${spring.kafka.topic.status}")
     private String topic;
+
+    public KafkaProducerController(KafkaProducer kafkaProducer) {
+        this.kafkaProducer = kafkaProducer;
+    }
 
     @PutMapping(value="/")
     public void publishMessage(@RequestHeader Map<String, String> headers,
