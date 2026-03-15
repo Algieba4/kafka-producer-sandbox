@@ -7,4 +7,3 @@ spring:
     properties:
       schema.registry.url: mock://test-scope
       security.protocol: PLAINTEXT
-    topic: test.topic
